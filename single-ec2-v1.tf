@@ -23,6 +23,7 @@ resource aws_instance "web" {
     tags = {
         name = "web"
     }
+    vpc_security_group_ids = [aws_security_group.all-8080.id]
 }
 
 resource "aws_security_group" "all-8080" {
