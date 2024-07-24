@@ -26,7 +26,7 @@ resource "aws_security_group" "all-80" {
     name = "all-80"
     vpc_id = var.main
 }
-resource "aws_vpc_security_group_ingress_rule" {
+resource "aws_vpc_security_group_ingress_rule" "ingress-80" {
     security_group_id = aws_security_group.all-80.id
     cidr_ipv4 = "0.0.0.0/0"
     from_port = var.http-port
