@@ -15,12 +15,7 @@ resource "aws_launch_template" "web-scaling" {
     name = "web-scaling"
     image_id = var.image_id
     vpc_security_group_ids = [aws_security_group.all-80.id]
-    user_data = <<-EOF
-                yum update -y
-                yum install httpd -y
-                systemctl start httpd
-                systemctl enable httpd
-                EOF
+    user_data = ${data.template_file.userdata.rendered}
 }
 resource "aws_security_group" "all-80" {
     name = "all-80"
@@ -43,4 +38,14 @@ resource "aws_autoscaling_group" "web-auto" {
         id = aws_launch_template.web-scaling.id
         version = "$Latest"
     }
+}
+
+data "template_file" "userdata" {
+  template = <<-EOF
+                #!/bin/bash
+                yum update
+                yum install httpd -y
+                systemctl start httpd
+                systmectl enable httpd
+                EOF
 }
